@@ -1,0 +1,20 @@
+services:
+  openvpn:
+    env_file: ../.env
+    build: ./docker_files/openvpn
+    image: tadaoji/openvpn
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "${DOCKER_OVPN_HOST_PORT}:1194/udp"
+    volumes:
+      - ../mount_dir/mnt_easy-rsa:/opt/mnt_easy-rsa
+      - ../mount_dir/mnt_ovpn:/opt/mnt_ovpn
+    working_dir: /opt/mnt_easy-rsa
+    networks:
+      - ovpnnet
+    restart: unless-stopped
+
+networks:
+  ovpnnet:
+
