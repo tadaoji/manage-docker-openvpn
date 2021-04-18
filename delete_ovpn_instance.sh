@@ -28,10 +28,10 @@ if [ `docker-compose ps | wc -l` -gt 2 ]; then
     
     # docker-compose ps の結果をチェックしてコンテナが消えたか見る
     if [ `docker-compose ps | wc -l` -eq 2 ]; then
-      color_echo "docker-compose rm .....Done" yellow
+      color_echo "docker-compose down .....Done" yellow
       docker-compose ps
     else
-      color_echo "Error, docker-compose rm" red
+      color_echo "Error, docker-compose down" red
     fi
     
 else
@@ -43,7 +43,7 @@ echo -e -n "\n"
 
 # 対話式で削除についてユーザーに確認する
 function ConfirmExecution() {
-  color_echo "Do you wish to remove following directory and files" cyan
+  color_echo "Do you wish to remove following directory and files?" cyan
   color_echo "./mount_dir/mnt_easy-rsa" cyan
   color_echo "./mount_dir/mnt_ovpn/logs" cyan
   color_echo "./mount_dir/mnt_ovpn/server.conf" cyan
