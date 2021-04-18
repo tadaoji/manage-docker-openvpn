@@ -29,6 +29,7 @@ if [ $? -eq 0 ]; then
   color_echo "Succeeded in delete client: ${1}  with easy-rsa" yellow
 else
   color_echo "Failed in delete client: ${1}  with easy-rsa" red
+  exit 1
 fi
 
 ## execしてcrl.pemの更新をする
@@ -39,42 +40,19 @@ if [ $? -eq 0 ]; then
   color_echo "Succeeded in re-creating crl.pem" yellow
 else
   color_echo "Failed in re-creating crl.pem" red
+  exit 1
 fi
 
-chmod o+r /docker/docker-files/ovpn/mount_dir/mnt_easy-rsa/pki/crl.pem
+chmod o+r ./mount_dir/mnt_easy-rsa/pki/crl.pem
 if [ $? -eq 0 ]; then
-  color_echo "chmod o+r /docker/docker-files/ovpn/mount_dir/mnt_easy-rsa/pki/crl.pem .......Done" yellow
+  color_echo "chmod o+r ./mount_dir/mnt_easy-rsa/pki/crl.pem .......Done" yellow
 else
-  color_echo "ERROR: chmod o+r /docker/docker-files/ovpn/mount_dir/mnt_easy-rsa/pki/crl.pem" red
+  color_echo "ERROR: chmod o+r ./mount_dir/mnt_easy-rsa/pki/crl.pem" red
+  exit 1
 fi
 
-## execしてupdate-dbを行い廃棄リストを読み込ませる
-#echo -e "\n"
-#color_echo "---------- Reload easy-rsa DB ----------" magenta
-#docker container exec -w /opt/mnt_easy-rsa ${DOCKER_CONTAINER_NAME} /bin/sh -c "echo 'yes' | /usr/share/easy-rsa/easyrsa update-db"
-#if [ $? -eq 0 ]; then
-#  color_echo "Succeeded in reload DB with /usr/share/easy-rsa/easyrsa update-db in docker ovpn container" yellow
-#else
-#  color_echo "Failed in reload DB with /usr/share/easy-rsa/easyrsa update-db in docker ovpn container" red
-#fi
-
-
-echo -e "\n"
 # telnetでコンテナ内のOpenVPN Managerに接続してrevoke対象を即時切断する
-# telnetでの操作
-color_echo "---------- Start check ovpn connecting status ----------" magenta
-MANAGER_RESPONSE=`(sleep 3; echo "status"; sleep 1; echo "quit"; sleep 1) | telnet ${DOCKER_CONTAINER_IP} 7505`
-color_echo "`echo "${MANAGER_RESPONSE}" | grep -E ^${1},`" cyan
-echo "${MANAGER_RESPONSE}" | grep -E ^${1}, 2>&1 1> /dev/null
-if [ $? -eq 0 ]; then
-  color_echo "Find connecting USER: ${1}" yellow
-  echo -e "\n"
-  color_echo "---------- kill connection from USER: ${1} ----------" magenta
-  (sleep 3; echo "kill ${1}" sleep3; echo quit; sleep 1) | telnet ${DOCKER_CONTAINER_IP} 7505
-  color_echo "Done" yellow
-else
-  color_echo "Can't find connection from USER: ${1} now. (no problem)" red
-fi
+./disconnect_account.sh
 
 # revokeしたclient DIRを削除（mnt_eay-rsa/revoked_user/以下に移動）する
 ## revoked_userが存在するかチェックする
@@ -88,7 +66,7 @@ fi
 
 mv ${PATH_EASY_RSA}/clients/${1} ${PATH_EASY_RSA}/revoked_user/`date '+%Y%m%d-%H%M'`-${1}
 if [ $? -eq 0 ]; then
-  color_echo "Moved ${PATH_EASY_RSA}/clients/${1} to PATH_EASY_RSA/revoked_user/${1}" yellow
+  color_echo "Moved ${PATH_EASY_RSA}/clients/${1} to ${PATH_EASY_RSA}/revoked_user/${1}" yellow
 else
   color_echo "Failed in Moving ${PATH_EASY_RSA}/clients/${1} to PATH_EASY_RSA/revoked_user/${1}" red
 fi
