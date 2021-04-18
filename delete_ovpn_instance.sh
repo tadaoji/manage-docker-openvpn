@@ -17,8 +17,8 @@ if [ `docker-compose ps | wc -l` -gt 2 ]; then
   docker-compose ps
   echo -e -n "\n"
 
-    # docker-compose rm をする
-    docker-compose stop && echo y | docker-compose rm
+    # docker-compose down をする
+    docker-compose down --volumes --remove-orphans
     if [ ! $? -eq 0 ]; then
       color_echo "Error, Can't remove docker-compose container" red
       exit 1
