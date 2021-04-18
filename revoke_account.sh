@@ -52,7 +52,7 @@ else
 fi
 
 # telnetでコンテナ内のOpenVPN Managerに接続してrevoke対象を即時切断する
-./disconnect_account.sh
+source ./disconnect_account.sh
 
 # revokeしたclient DIRを削除（mnt_eay-rsa/revoked_user/以下に移動）する
 ## revoked_userが存在するかチェックする
