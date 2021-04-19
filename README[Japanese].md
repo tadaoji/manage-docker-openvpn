@@ -7,6 +7,10 @@ dockerとdocker-composeを利用し、OpenVPNを利用します。
 * OpenVPNに接続しているクライアントの通信を切る
 * OpenVPN環境を削除する
 
+# 必要な環境
+* Linux
+* Docker
+* Docker-compose
 
 # 初期設定
 ## 展開

@@ -9,6 +9,10 @@ Here's what you can do with this script.
 * Shut down the connection of the client connected to OpenVPN.
 * Delete the OpenVPN environment.
 
+# Required environment
+* Linux
+* Docker
+* Docker-compose
 
 # Initialization
 ## Unpack.
