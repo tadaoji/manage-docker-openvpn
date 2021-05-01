@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 source ./lib.sh
 
@@ -24,7 +24,7 @@ get_docker_info  # ./lib.sh
 echo -e "\n"
 color_echo "---------- Revoke account with easy-rsa in ovpn docker container ----------" magenta
 # execしてrevokeする
-docker container exec -w /opt/mnt_easy-rsa ${DOCKER_CONTAINER_NAME} /bin/sh -c "echo 'yes' | /usr/share/easy-rsa/easyrsa revoke ${1}"
+docker container exec -w /opt/mnt_easy-rsa ${DOCKER_CONTAINER_NAME} /bin/bash -c "echo 'yes' | /usr/share/easy-rsa/easyrsa revoke ${1}"
 if [ $? -eq 0 ]; then
   color_echo "Succeeded in delete client: ${1}  with easy-rsa" yellow
 else
@@ -35,7 +35,7 @@ fi
 ## execしてcrl.pemの更新をする
 echo -e "\n"
 color_echo "---------- Re create crl.pem file ----------" magenta
-docker container exec -w /opt/mnt_easy-rsa ${DOCKER_CONTAINER_NAME} /bin/sh -c "/usr/share/easy-rsa/easyrsa gen-crl"
+docker container exec -w /opt/mnt_easy-rsa ${DOCKER_CONTAINER_NAME} /bin/bash -c "/usr/share/easy-rsa/easyrsa gen-crl"
 if [ $? -eq 0 ]; then
   color_echo "Succeeded in re-creating crl.pem" yellow
 else

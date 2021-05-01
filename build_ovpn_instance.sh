@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 source ./lib.sh
 cd ./docker_ovpn
 error_flag_port=0

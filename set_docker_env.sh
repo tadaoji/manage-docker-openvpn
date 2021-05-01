@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 function check_funcname(){
   if [ ! ${FUNCNAME[1]} = "source" ]; then

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 function color_echo() {
   local ESC
   ESC=$(printf '\033')

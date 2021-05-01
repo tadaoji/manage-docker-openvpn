@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 source ./lib.sh
 value_from_env
